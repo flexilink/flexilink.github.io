@@ -64,15 +64,15 @@ Collaboration enquiries are welcome from regulators, telecom operators, energy c
 
 ## **Publications**
 
-1. Wang, Yonghao, John Grant, and Jeremy Foss. *Flexilink: A Unified Low Latency Network Architecture for Multichannel Live Audio*. Audio Engineering Society Convention 133, 2012.
+1. Wang, Yonghao, John Grant, and Jeremy Foss. *Flexilink: A Unified Low Latency Network Architecture for Multichannel Live Audio*. Audio Engineering Society Convention 133, 2012. [PDF](docs/papers/201210%20Flexilink%20A%20unified%20low%20latency%20network%20architecture%20for%20multichannel%20live%20audio.pdf)
 
 1. Ma, T., Y. Wang, W. Hu, D. El-Banna, and K. Zhang. *Evaluation of Flexilink as Unified Real-Time Protocol for Industrial Networks*. 2018 13th IEEE Conference on Industrial Electronics and Applications (ICIEA), May 2018, 123–28. https://doi.org/10.1109/ICIEA.2018.8397701.
 
-1. Ma, Tianao, Wei Hu, Yonghao Wang, Dalia El-Banna, John Grant, and Hongjun Dai. *Evaluation of Flexilink as Deterministic Unified Real-Time Protocol for Industrial Networks*. 2018 17th IEEE International Conference On Trust, Security And Privacy In Computing And Communications/12th IEEE International Conference On Big Data Science And Engineering (TrustCom/BigDataSE), 2018, 22–27.
+1. Ma, Tianao, Wei Hu, Yonghao Wang, Dalia El-Banna, John Grant, and Hongjun Dai. *Evaluation of Flexilink as Deterministic Unified Real-Time Protocol for Industrial Networks*. 2018 17th IEEE International Conference On Trust, Security And Privacy In Computing And Communications/12th IEEE International Conference On Big Data Science And Engineering (TrustCom/BigDataSE), 2018, 22–27. [PDF](docs/papers/201808%20TrustCom%20Evaluation%20of%20Flexilink%20as%20Deterministic%20Unified%20Real-Time%20Protocol%20for%20Industrial%20Networks.pdf)
 
-1. Guo, Yi, Jing Liu, Yonghao Wang, and Wei Hu. *Short Cycle Conversion Scheduling Model for Flexilink Architecture*. 2019 IEEE 21st International Conference on High Performance Computing and Communications; IEEE 17th International Conference on Smart City; IEEE 5th International Conference on Data Science and Systems (HPCC/SmartCity/DSS), August 2019, 2367–72. https://doi.org/10.1109/HPCC/SmartCity/DSS.2019.00329.
+1. Guo, Yi, Jing Liu, Yonghao Wang, and Wei Hu. *Short Cycle Conversion Scheduling Model for Flexilink Architecture*. 2019 IEEE 21st International Conference on High Performance Computing and Communications; IEEE 17th International Conference on Smart City; IEEE 5th International Conference on Data Science and Systems (HPCC/SmartCity/DSS), August 2019, 2367–72. https://doi.org/10.1109/HPCC/SmartCity/DSS.2019.00329. [PDF](docs/papers/201908%20Short%20Cycle%20Conversion%20Scheduling%20Model%20forFlexilink%20Architecture.pdf)
 
-1. Ma, Rongxuan, Yonghao Wang, Wei Hu, and Mahir Payyanil Karalakath. *Evaluation of Video Payload over Low Latency Networks: Flexilink*. International Journal of Parallel, Emergent and Distributed Systems 35, no. 3 (2020): 273–87. https://doi.org/10.1080/17445760.2018.1487065.
+1. Ma, Rongxuan, Yonghao Wang, Wei Hu, and Mahir Payyanil Karalakath. *Evaluation of Video Payload over Low Latency Networks: Flexilink*. International Journal of Parallel, Emergent and Distributed Systems 35, no. 3 (2020): 273–87. https://doi.org/10.1080/17445760.2018.1487065. [PDF](docs/papers/201806%20Evaluation%20of%20video%20payload%20over%20low%20latency%20networks%20Flexilink.pdf)
 
 ---
 
