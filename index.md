@@ -80,7 +80,7 @@ Collaboration enquiries are welcome from regulators, telecom operators, energy c
 
 For collaboration, demonstrations or briefings:
 
-- Yonghao "Leo" Wang — Birmingham City University  
+- Yonghao Leo Wang — Birmingham City University  
     Email: "yonghao.wang AT bcu.ac.uk"
 
 - John Grant — Nine Tiles, Cambridge  
