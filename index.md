@@ -14,6 +14,14 @@ The technology has been put forward to the **ETSI Non‑IP Networking (NIN)** in
 
 ---
 
+## **News**
+
+* **2026-02-18:** We have just released the **FlexiLink Controller source code**.
+    * Controller source directory: [ControllerSRC](https://github.com/flexilink/flexilink-controller/tree/main/ControllerSRC)
+    * Wireshark plugin (to decode and understand FlexiLink traffic captures): [WiresharkPlugin](https://github.com/flexilink/flexilink-controller/tree/main/WiresharkPlugin)
+
+---
+
 ## **Key Features**
 
 * **Latency as low as 65μs** for high‑resolution audio
