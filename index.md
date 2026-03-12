@@ -2,7 +2,7 @@
 
 ### **About the Project**
 
-FlexiLink is a next-generation deterministic networking architecture designed as a **non-IP, ultra-low-latency, time-deterministic backbone** for critical systems, including:
+FlexiLink is a next-generation deterministic networking architecture designed as a **non-IP, ultra-low-latency, time-deterministic backbone** for real-time and mission-sensitive systems, including:
 
 - Energy networks and smart grid
 - Industrial control and automation (OT/ICS)
@@ -10,7 +10,7 @@ FlexiLink is a next-generation deterministic networking architecture designed as
 - Live media and real-time AV workloads
 - Wider critical national infrastructure (CNI)
 
-The technology has been proposed to the **ETSI Non-IP Networking (NIN)** initiative.
+The technology direction has been presented to the **ETSI Non-IP Networking (NIN)** initiative for discussion and evaluation.
 
 ---
 
@@ -57,21 +57,21 @@ FlexiLink is a **clean-slate Non-IP Layer2/3 architecture** designed for determi
 Key positioning points:
 
 - **Security-by-design flows:** authenticated flow setup before forwarding data
-- **Deterministic behaviour:** engineered for time-critical traffic predictability
-- **Legacy migration path:** transparent tunnelling to protect existing Ethernet/IP estates
-- **High efficiency:** strong bandwidth utilisation with low per-packet overhead
-- **Standardisation direction:** active alignment with ETSI Non-IP networking discussions
+- **Deterministic behaviour:** engineered for predictable handling of time-critical traffic
+- **Legacy migration path:** transparent tunnelling to support protection of existing Ethernet/IP estates
+- **High efficiency:** designed for strong bandwidth utilisation with low per-packet overhead
+- **Standards engagement:** aligned with ongoing ETSI Non-IP networking discussions
 
 ---
 
 ## **Key Features**
 
-- **Latency as low as 65μs** for high-resolution audio scenarios
-- **Guaranteed delivery path** for time-critical wired flows (subject to normal physical-layer assumptions)
-- **Up to 97.6% bandwidth utilisation** for user payload in benchmarked scenarios
-- **Hardware-proven prototype** (Aubergine FPGA platform)
-- **Reduced attack surface** by avoiding always-on IP routing assumptions
-- **Compatible migration approach** over existing fibre/IP infrastructure where needed
+- **Latency measured as low as 65μs** in high-resolution audio test scenarios
+- **Designed for deterministic delivery** on time-critical wired flows (subject to normal physical-layer assumptions)
+- **Up to 97.6% bandwidth utilisation** observed in benchmarked payload scenarios
+- **Hardware prototype demonstrated** on the Aubergine FPGA platform
+- **Reduced attack surface profile** by avoiding always-on IP routing assumptions
+- **Migration-compatible approach** over existing fibre/IP infrastructure where needed
 
 ---
 
@@ -99,7 +99,7 @@ FlexiLink has been implemented in FPGA as the **Aubergine switch**, featuring:
 
 ## **Standards & Collaboration**
 
-FlexiLink contributes to international standardisation and collaborative research:
+FlexiLink is being developed alongside international standardisation and collaborative research efforts:
 
 - **ETSI NIN (Non-IP Networking)**
 - **AES / IEC 62379 related directions**
