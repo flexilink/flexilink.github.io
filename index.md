@@ -1,4 +1,4 @@
-## **FlexiLink: Secure-by-Design Non-IP Networking for Critical Infrastructure**
+## **FlexiLink: A Deterministic, Secure-by-Design Non-IP Network Protocol Architecture**
 
 ### **About the Project**
 
