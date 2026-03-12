@@ -50,7 +50,7 @@ For controller internals and tooling:
 
 ---
 
-## **Positioning Summary (Brief03 aligned)**
+## **Strategic Positioning**
 
 FlexiLink is positioned as a **clean-slate Non-IP Layer2/3 architecture** aimed at deterministic operation and reduced attack surface in CNI contexts.
 
