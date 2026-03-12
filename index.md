@@ -14,10 +14,10 @@ The technology has been proposed to the **ETSI Non-IP Networking (NIN)** initiat
 
 ---
 
-## **What’s New**
+## **Updates**
 
-- **2026-03-12:** Website refreshed with GitHub organisation links and public repository overview.
-- **2026-02-18:** FlexiLink controller source and tooling were released publicly.
+- **2026-03-12:** Homepage updated with GitHub organisation links and public repository summaries.
+- **2026-02-18:** FlexiLink controller source and tooling made publicly available.
 
 ---
 
@@ -25,7 +25,7 @@ The technology has been proposed to the **ETSI Non-IP Networking (NIN)** initiat
 
 [![GitHub](https://img.shields.io/badge/GitHub-flexilink-181717?logo=github&logoColor=white)](https://github.com/flexilink)
 
-Explore all public work under the FlexiLink organisation:
+Explore publicly available FlexiLink work under the organisation:
 
 - **Organisation home:** [github.com/flexilink](https://github.com/flexilink)
 
@@ -40,10 +40,10 @@ Explore all public work under the FlexiLink organisation:
    Repo: [github.com/flexilink/flexilink-docs](https://github.com/flexilink/flexilink-docs)
 
 3. **flexilink.github.io**  
-   Public organisation homepage source.  
+   Source repository for the public organisation website.  
    Repo: [github.com/flexilink/flexilink.github.io](https://github.com/flexilink/flexilink.github.io)
 
-For controller internals and tooling:
+For source code components and analysis tooling:
 
 - Controller source directory: [ControllerSRC](https://github.com/flexilink/flexilink-controller/tree/main/ControllerSRC)
 - Wireshark plugin for FlexiLink traffic decoding: [WiresharkPlugin](https://github.com/flexilink/flexilink-controller/tree/main/WiresharkPlugin)
@@ -52,7 +52,7 @@ For controller internals and tooling:
 
 ## **Strategic Positioning**
 
-FlexiLink is positioned as a **clean-slate Non-IP Layer2/3 architecture** aimed at deterministic operation and reduced attack surface in CNI contexts.
+FlexiLink is a **clean-slate Non-IP Layer2/3 architecture** designed for deterministic operation and a reduced attack surface in CNI environments.
 
 Key positioning points:
 
