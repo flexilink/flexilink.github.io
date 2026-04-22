@@ -1,138 +1,208 @@
-## **FlexiLink: A Deterministic, Secure-by-Design Non-IP Network Protocol Architecture**
+---
+layout: default
+title: Flexilink — Deterministic, Secure-by-Design Non-IP Networking
+---
 
-### **About the Project**
+# Flexilink — Deterministic, Secure-by-Design Non-IP Networking
 
-FlexiLink is a next-generation deterministic networking architecture designed as a **non-IP, ultra-low-latency, time-deterministic backbone** for real-time and mission-sensitive systems, including:
+> **A clean-slate Layer 2/3 network architecture delivering guaranteed latency, security-by-design, and deterministic bandwidth for critical infrastructure.**
 
-- Energy networks and smart grid
-- Industrial control and automation (OT/ICS)
-- Telecom backbone (5G/6G evolution)
-- Live media and real-time AV workloads
-- Wider critical national infrastructure (CNI)
-
-The technology direction has been presented to the **ETSI Non-IP Networking (NIN)** initiative for discussion and evaluation.
+[![GitHub Org](https://img.shields.io/badge/GitHub-flexilink-181717?logo=github&logoColor=white)](https://github.com/flexilink)
+[![ETSI NIN](https://img.shields.io/badge/ETSI-NIN%20Standards-blue)](docs/standards/)
+[![Papers](https://img.shields.io/badge/Publications-%20papers-green)](docs/papers/)
 
 ---
 
-## **Updates**
+## What is Flexilink?
 
-- **2026-03-12:** Homepage updated with GitHub organisation links and public repository summaries.
-- **2026-02-18:** FlexiLink controller source and tooling made publicly available.
+Flexilink is a **non-IP networking architecture** that replaces IP's best-effort forwarding model with a strictly deterministic, authenticated, and time-division-based data plane. Unlike TCP/IP — which was designed for resilient, best-effort communication — Flexilink is engineered from the ground up for systems where **latency guarantees, security, and predictability are non-negotiable**.
+
+Layer 1 (the physical medium — fibres, cables, wireless) remains unchanged. Flexilink replaces Layers 2 and 3, while upper-layer application protocols continue to operate normally above it. Session establishment may evolve to take full advantage of the new guarantees offered.
+
+### Why not just use IP?
+
+IP networking carries fundamental design compromises that cannot be patched away:
+
+| Property | IP / TCP | Flexilink |
+|---|---|---|
+| Forwarding model | Best-effort, variable latency | Deterministic, guaranteed slots |
+| Security | Bolt-on (TLS, IPSec, firewalls) | Security-by-design at flow setup |
+| Bandwidth waste | Header overhead, retransmissions | ≤1.6% overhead, no retransmissions |
+| Attack surface | Large (routing table poisoning, DDoS, spoofing) | Minimal — no IP addresses, no ARP, no DHCP |
+| Real-time suitability | Requires QoS workarounds (MPLS, TSN) | Native guaranteed service built in |
 
 ---
 
-## **GitHub Organisation**
+## Key Performance Figures
+
+| Metric | Value |
+|--------|-------|
+| Minimum measured latency | **65 μs** (high-resolution audio) |
+| Maximum bandwidth utilisation | **97.6%** |
+| Guaranteed service overhead | **≤ 1.6%** |
+| Allocation period range | **0.5 ms – 32 ms** (configurable) |
+| Link speeds supported | **1 Gb/s** (current); 10 Gb/s planned |
+| Physical layer | Unchanged — runs over existing fibre/Ethernet/wireless |
+
+---
+
+## Architecture
+
+Flexilink separates network traffic into two services, carried simultaneously over the same link:
+
+- **Guaranteed Service (GS)** — time-division slots reserved at connection setup; deterministic delivery, fixed latency, used for audio, video, real-time control
+- **Basic Service (BS)** — best-effort traffic (legacy IP, management, low-priority data) carried in unused slot gaps
+
+![Flexilink Slot Allocation Diagram](docs/images/flexilink_dataframe.png)
+
+*Figure 1: Flexilink slot allocation over a fixed period t₀ — Guaranteed Service (AV: Audio Visual Traffic) is transmitted at a fixed rate with variable-length frames occupying reserved slots each period; Basic Service (IT: Best-Effort IT Traffic) fills the remaining available bandwidth slots.*
+
+### How guaranteed slots work
+
+Each allocation period (configurable, typically 1 ms at 1 Gb/s ≈ 1,952 slots) acts as a repeating schedule window. Reserved flows are assigned fixed slot positions that repeat every period. The router forwards each slot purely by its position — no per-packet address lookup, no congestion, no jitter.
+
+
+## Hardware Prototype — The Aubergine Switch
+
+Flexilink has been fully implemented and demonstrated on the **Aubergine** FPGA-based switching platform.
+
+![Aubergine rack units](docs/images/aubergine-hardware.jpeg)
+
+*Figure 2: Three Aubergine Flexilink switches (rack-mount, 1U) used in the BCU research laboratory.*
+
+### Aubergine specifications
+
+- **FPGA:** Xilinx Spartan 6 SLX45T
+- **Ports:** 4× 1 Gb/s Ethernet, 4× SFP (fibre), 4× AES3 digital audio in/out, 1× AES10 (MADI, 64 channels), SDI video, word clock input
+- **Soft CPU:** TeaLeaves VM4 — a 32-bit stack processor running in FPGA fabric
+- **Management:** Simple Control Protocol (SCP, ETSI GS NIN 005 Annex C)
+
+### FPGA Internal Architecture
+
+![Aubergine FPGA block diagram](docs/images/aubergine-fpga-block-diagram.png)
+
+*Figure 3: Aubergine FPGA block diagram — routing logic, per-port FIFOs, MAC layer, TeaLeaves VM soft processor, DDR3 dRAM buffer, and serial flash, all within a single Spartan 6 FPGA.*
+
+### PCB Layout
+
+![Aubergine PCB layout](docs/images/aubergine-pcb-layout.jpeg)
+
+*Figure 4: Aubergine Flexilink switch PCB layout — the physical implementation of the Flexilink switching hardware, housing the Xilinx Spartan 6 FPGA, DDR3 memory, Ethernet/SFP interfaces, and AES3/AES10 audio I/O on a single board.*
+
+### Laboratory Setup
+
+![Aubergine lab rack](docs/images/aubergine-lab-setup.jpeg)
+
+*Figure 5: BCU laboratory rack — multiple Aubergine switches interconnected with AES3/AES10 professional audio equipment for live latency and determinism testing.*
+
+---
+
+## Applications
+
+Flexilink is designed for any system where **determinism, security, and low latency** are critical requirements:
+
+### Critical National Infrastructure (CNI)
+
+- **Energy / Smart Grid** — IEC 61850 GOOSE/Sampled Values messages have ≤ 4 ms latency requirements; Flexilink's 1 ms allocation period meets this natively without QoS workarounds. Currently under investigation for UK distribution network operators (DNO) through an Innovate UK SIF bid.
+- **Industrial control (OT/ICS)** — deterministic delivery eliminates timing uncertainty in SCADA and control loops
+- **Remote surgery / tactile networking** — round-trip latency of < 1 ms demonstrated
+
+### Professional Media
+
+- **Live broadcast audio** — AES3/AES10 (MADI) transport with measured latency of 65 μs; demonstrated with up to 64-channel MADI
+- **HD/4K video** — SDI transport at up to 3 Gb/s via SFP modules
+- **Broadcast infrastructure** — directly replaces AES51/AES67 audio-over-IP with guaranteed delivery
+
+### 5G / 6G Backbone and Wireless
+
+- **DECT-2020 NR** — Flexilink over DECT-2020 wireless defined in ETSI GS NIN 004
+- **Heterogeneous networks** — mobility handover with deterministic re-routing; wireless PHY integration defined
+
+---
+
+## Software-Defined Control — TEALeaves
+
+The Flexilink data plane is managed by a **soft processor (VM4)** running inside the FPGA, programmed in the **TEALeaves** domain-specific language. This enables:
+
+- Routing table updates and flow management without FPGA recompilation
+- Signalling and admission control in VM4 bytecode
+- A TEALogics backend that compiles TEALeaves directly to FPGA logic — enabling hardware acceleration at software development speed
+
+The **Flexilink Controller** (Windows application) provides a graphical interface for configuring switches, monitoring flows, and viewing live network state.
+
+---
+
+## Standards & Collaboration
+
+Flexilink is developed in close alignment with international standardisation:
+
+| Body | Activity |
+|------|----------|
+| **ETSI ISG NIN** | Non-IP Networking working group — John Grant is chair; Flexilink is the reference implementation |
+| **AES / IEC 62379** | Audio-oriented network management protocol; Flexilink implements a modified version |
+| **ETSI GS NGP 013** | Normative slot/frame format specification used by Flexilink |
+
+Collaboration enquiries are welcome from energy network operators, telecom providers, broadcast engineers, security researchers, and academic institutions.
+
+---
+
+## GitHub Organisation
 
 [![GitHub](https://img.shields.io/badge/GitHub-flexilink-181717?logo=github&logoColor=white)](https://github.com/flexilink)
 
-Explore publicly available FlexiLink work under the organisation:
+All publicly available Flexilink materials are hosted under the [flexilink GitHub organisation](https://github.com/flexilink):
 
-- **Organisation home:** [github.com/flexilink](https://github.com/flexilink)
+| Repository | Contents |
+|------------|----------|
+| [flexilink-controller](https://github.com/flexilink/flexilink-controller) | Windows Controller binaries (v2.1.2, v3.0.2, v3.1.0c), Controller C++ source, Wireshark plugin for Flexilink frame analysis |
+| [flexilink-docs](https://github.com/flexilink/flexilink-docs) | Research documentation and technical project materials |
+| [flexilink.github.io](https://github.com/flexilink/flexilink.github.io) | Source for this website |
 
-### **Public repositories**
+### Standards documents
 
-1. **flexilink-controller**  
-   FlexiLink controller deliverables and related binary artefacts.  
-   Repo: [github.com/flexilink/flexilink-controller](https://github.com/flexilink/flexilink-controller)
+Published ETSI NIN standards are available in [`docs/standards/`](docs/standards/):
 
-2. **flexilink-docs**  
-   Research documentation and technical project materials.  
-   Repo: [github.com/flexilink/flexilink-docs](https://github.com/flexilink/flexilink-docs)
-
-3. **flexilink.github.io**  
-   Source repository for the public organisation website.  
-   Repo: [github.com/flexilink/flexilink.github.io](https://github.com/flexilink/flexilink.github.io)
-
-For source code components and analysis tooling:
-
-- Controller source directory: [ControllerSRC](https://github.com/flexilink/flexilink-controller/tree/main/ControllerSRC)
-- Wireshark plugin for FlexiLink traffic decoding: [WiresharkPlugin](https://github.com/flexilink/flexilink-controller/tree/main/WiresharkPlugin)
+- [GR NIN 001](docs/standards/gr_NIN001v010101p.pdf) — Problem Statement
+- [GR NIN 002](docs/standards/gr_NIN002v010101p.pdf) — Post-IP Networking
+- [GR NIN 003](docs/standards/gr_NIN003v010101p.pdf) — Application-Aware Networks
+- [GS NIN 005](docs/standards/gs_NIN005v010101p.pdf) — Terminology & Architecture *(normative)*
+- [GS NIN 006](docs/standards/gs_NIN006v010101p.pdf) — Use Cases *(normative)*
 
 ---
 
-## **Strategic Positioning**
+## Selected Publications
 
-FlexiLink is a **clean-slate Non-IP Layer2/3 architecture** designed for deterministic operation and a reduced attack surface in CNI environments.
+1. Wang, Yonghao, John Grant, and Jeremy Foss. *Flexilink: A Unified Low Latency Network Architecture for Multichannel Live Audio*. AES Convention 133, 2012. [PDF](docs/papers/201210%20Flexilink%20A%20unified%20low%20latency%20network%20architecture%20for%20multichannel%20live%20audio.pdf)
 
-Key positioning points:
+2. Ma, T., Y. Wang, W. Hu, D. El-Banna, and K. Zhang. *Performance Evaluation of a New Flexible TDM Protocol on Mixed Traffic Types*. IEEE AINA, 2017. [PDF](docs/papers/201703%20AINA%20Performance%20Evaluation%20of%20a%20New%20Flexible%20Time%20Division%20Multiplexing%20Protocol%20on%20Mixed%20Traffic%20Types.pdf)
 
-- **Security-by-design flows:** authenticated flow setup before forwarding data
-- **Deterministic behaviour:** engineered for predictable handling of time-critical traffic
-- **Legacy migration path:** transparent tunnelling to support protection of existing Ethernet/IP estates
-- **High efficiency:** designed for strong bandwidth utilisation with low per-packet overhead
-- **Standards engagement:** aligned with ongoing ETSI Non-IP networking discussions
+3. Ma, Tianao, Wei Hu, Yonghao Wang, Dalia El-Banna, John Grant, and Hongjun Dai. *Evaluation of Flexilink as Deterministic Unified Real-Time Protocol for Industrial Networks*. IEEE TrustCom/BigDataSE, 2018. [PDF](docs/papers/201808%20TrustCom%20Evaluation%20of%20Flexilink%20as%20Deterministic%20Unified%20Real-Time%20Protocol%20for%20Industrial%20Networks.pdf)
 
----
+4. Ma, T., Y. Wang, W. Hu, D. El-Banna, and K. Zhang. *Evaluation of New Dynamic TDM Protocol for Real-Time Traffic over Converged Networks*. IEEE FiCloud, 2018. [PDF](docs/papers/201808%20FiCloud%20Evaluation%20of%20NewDynamic%20TimeDivision%20Multiplexing%20Protocol%20for%20Real-TimeTraffic%20overConvergedNetworks.pdf)
 
-## **Key Features**
+5. Guo, Yi, Jing Liu, Yonghao Wang, and Wei Hu. *Short Cycle Conversion Scheduling Model for Flexilink Architecture*. IEEE HPCC/SmartCity/DSS, 2019. [PDF](docs/papers/201908%20Short%20Cycle%20Conversion%20Scheduling%20Model%20forFlexilink%20Architecture.pdf)
 
-- **Latency measured as low as 65μs** in high-resolution audio test scenarios
-- **Designed for deterministic delivery** on time-critical wired flows (subject to normal physical-layer assumptions)
-- **Up to 97.6% bandwidth utilisation** observed in benchmarked payload scenarios
-- **Hardware prototype demonstrated** on the Aubergine FPGA platform
-- **Reduced attack surface profile** by avoiding always-on IP routing assumptions
-- **Migration-compatible approach** over existing fibre/IP infrastructure where needed
+6. Ma, Rongxuan, Yonghao Wang, Wei Hu, and Mahir Payyanil Karalakath. *Evaluation of Video Payload over Low Latency Networks: Flexilink*. International Journal of Parallel, Emergent and Distributed Systems 35(3), 2020. [PDF](docs/papers/201806%20Evaluation%20of%20video%20payload%20over%20low%20latency%20networks%20Flexilink.pdf)
 
 ---
 
-## **Project Documentation**
+## Recent Updates
 
-Initial documentation will continue to expand. Planned content includes:
-
-- Architecture overview
-- Core technology and data plane/control plane concepts
-- Cloud-based test lab model
-- Publications and IP references
+- **April 2026** — New hardware development document published; FPGA platform expansion (Achronix, Microchip) under evaluation for next-generation switches.
+- **March 2026** — Flexilink Controller v3.1.0c released; Controller source code and Wireshark plugin made publicly available.
 
 ---
 
-## **Hardware Prototypes**
-
-FlexiLink has been implemented in FPGA as the **Aubergine switch**, featuring:
-
-- Deterministic switching fabric
-- Custom soft CPU approach
-- Hardware scheduling
-- Real-time audio/video routing with deterministic latency
-
----
-
-## **Standards & Collaboration**
-
-FlexiLink is being developed alongside international standardisation and collaborative research efforts:
-
-- **ETSI NIN (Non-IP Networking)**
-- **AES / IEC 62379 related directions**
-- **Security and time-critical networking research (Birmingham City University and partners)**
-
-Collaboration enquiries are welcome from regulators, telecom operators, energy organisations, and research institutions.
-
----
-
-## **Publications**
-
-1. Wang, Yonghao, John Grant, and Jeremy Foss. *Flexilink: A Unified Low Latency Network Architecture for Multichannel Live Audio*. Audio Engineering Society Convention 133, 2012. [PDF](docs/papers/201210%20Flexilink%20A%20unified%20low%20latency%20network%20architecture%20for%20multichannel%20live%20audio.pdf)
-
-2. Ma, T., Y. Wang, W. Hu, D. El-Banna, and K. Zhang. *Evaluation of Flexilink as Unified Real-Time Protocol for Industrial Networks*. 2018 13th IEEE Conference on Industrial Electronics and Applications (ICIEA), May 2018, 123–28. https://doi.org/10.1109/ICIEA.2018.8397701.
-
-3. Ma, Tianao, Wei Hu, Yonghao Wang, Dalia El-Banna, John Grant, and Hongjun Dai. *Evaluation of Flexilink as Deterministic Unified Real-Time Protocol for Industrial Networks*. 2018 17th IEEE International Conference on Trust, Security and Privacy in Computing and Communications / BigDataSE, 2018, 22–27. [PDF](docs/papers/201808%20TrustCom%20Evaluation%20of%20Flexilink%20as%20Deterministic%20Unified%20Real-Time%20Protocol%20for%20Industrial%20Networks.pdf)
-
-4. Guo, Yi, Jing Liu, Yonghao Wang, and Wei Hu. *Short Cycle Conversion Scheduling Model for Flexilink Architecture*. HPCC/SmartCity/DSS, 2019, 2367–72. https://doi.org/10.1109/HPCC/SmartCity/DSS.2019.00329. [PDF](docs/papers/201908%20Short%20Cycle%20Conversion%20Scheduling%20Model%20forFlexilink%20Architecture.pdf)
-
-5. Ma, Rongxuan, Yonghao Wang, Wei Hu, and Mahir Payyanil Karalakath. *Evaluation of Video Payload over Low Latency Networks: Flexilink*. International Journal of Parallel, Emergent and Distributed Systems 35, no. 3 (2020): 273–87. https://doi.org/10.1080/17445760.2018.1487065. [PDF](docs/papers/201806%20Evaluation%20of%20video%20payload%20over%20low%20latency%20networks%20Flexilink.pdf)
-
----
-
-## **Contact**
+## Contact
 
 For collaboration, demonstrations, or technical briefings:
 
-- **Dr Yonghao (Leo) Wang** — Birmingham City University  
-  Email: `yonghao.wang AT bcu.ac.uk`
+| | |
+|---|---|
+| **Dr Yonghao (Leo) Wang** | Birmingham City University |
+| | [yonghao.wang@bcu.ac.uk](mailto:yonghao.wang@bcu.ac.uk) |
+| **John Grant** | Nine Tiles, Cambridge — Inventor & Lead Engineer |
+| | [j@ninetiles.com](mailto:j@ninetiles.com) |
 
-- **John Grant** — Nine Tiles, Cambridge  
-  Email: `j AT ninetiles.com`
-
-## **Additional Resources**
-
-- [Nine Tiles](http://www.ninetiles.com/)
+- [Nine Tiles Ltd](http://www.ninetiles.com/) — Cambridge, UK
+- [Birmingham City University](https://www.bcu.ac.uk) — Faculty of Computing
