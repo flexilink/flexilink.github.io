@@ -15,7 +15,7 @@ title: Flexilink — Deterministic, Secure-by-Design Non-IP Networking
 
 ## What is Flexilink?
 
-Flexilink is a **non-IP networking architecture** that replaces IP's best-effort forwarding model with a strictly deterministic, authenticated, and time-division-based data plane. Unlike TCP/IP — which was designed for resilient, best-effort communication — Flexilink is engineered from the ground up for systems where **latency guarantees, security, and predictability are non-negotiable**.
+Flexilink is a **non-IP networking architecture** that replaces IP’s insecure best-effort forwarding model with a secure, authenticated, data plane that also offers a strictly deterministic and time-division-based service. Unlike TCP/IP — which was designed for resilient, best-effort communication — Flexilink is engineered from the ground up for systems where **latency guarantees, security, and predictability are non-negotiable**.
 
 Layer 1 (the physical medium — fibres, cables, wireless) remains unchanged. Flexilink replaces Layers 2 and 3, while upper-layer application protocols continue to operate normally above it. Session establishment may evolve to take full advantage of the new guarantees offered.
 
@@ -45,8 +45,8 @@ IP networking carries fundamental design compromises that cannot be patched away
 | Maximum bandwidth utilisation | **97.6%** |
 | Guaranteed service overhead | **≤ 1.6%** |
 | Allocation period range | **0.5 ms – 32 ms** (configurable) |
-| Link speeds supported | **1 Gb/s** (current); 10 Gb/s planned |
-| Physical layer | Unchanged — runs over existing fibre/Ethernet/wireless |
+| Link speeds supported | **1 Gb/s** (current); 10 Gb/s planned, and others|
+| Physical layer | Unchanged — runs over existing fibre/Ethernet/wireless (conditional) |
 
 ---
 
@@ -54,8 +54,8 @@ IP networking carries fundamental design compromises that cannot be patched away
 
 Flexilink separates network traffic into two services, carried simultaneously over the same link:
 
-- **Guaranteed Service (GS)** — time-division slots reserved at connection setup; deterministic delivery, fixed latency, used for audio, video, real-time control
-- **Basic Service (BS)** — best-effort traffic (legacy IP, management, low-priority data) carried in unused slot gaps
+- **Guaranteed Service (AV: Audio Visual Traffic)** — time-division slots reserved at connection setup; deterministic delivery, fixed latency, used for audio, video, real-time control
+- **Basic Service (IT: Best-Effort IT Traffic)** — best-effort traffic (legacy IP, management, low-priority data) carried in unused slot gaps
 
 ![Flexilink Slot Allocation Diagram](docs/images/flexilink_dataframe.png)
 
@@ -79,13 +79,13 @@ Flexilink has been fully implemented and demonstrated on the **Aubergine** FPGA-
 - **FPGA:** Xilinx Spartan 6 SLX45T
 - **Ports:** 4× 1 Gb/s Ethernet, 4× SFP (fibre), 4× AES3 digital audio in/out, 1× AES10 (MADI, 64 channels), SDI video, word clock input
 - **Soft CPU:** TeaLeaves VM4 — a 32-bit stack processor running in FPGA fabric
-- **Management:** Simple Control Protocol (SCP, ETSI GS NIN 005 Annex C)
+- **Management:** "IEC 62379 Common Control Interface
 
 ### FPGA Internal Architecture
 
 ![Aubergine FPGA block diagram](docs/images/aubergine-fpga-block-diagram.png)
 
-*Figure 3: Aubergine FPGA block diagram — routing logic, per-port FIFOs, MAC layer, TeaLeaves VM soft processor, DDR3 dRAM buffer, and serial flash, all within a single Spartan 6 FPGA.*
+*Figure 3: Aubergine FPGA block diagram — routing logic, per-port FIFOs, MAC layer, TeaLeaves VM soft processor, all within a single Spartan 6 FPGA.*
 
 ### PCB Layout
 
@@ -115,7 +115,7 @@ Flexilink is designed for any system where **determinism, security, and low late
 
 - **Live broadcast audio** — AES3/AES10 (MADI) transport with measured latency of 65 μs; demonstrated with up to 64-channel MADI
 - **HD/4K video** — SDI transport at up to 3 Gb/s via SFP modules
-- **Broadcast infrastructure** — directly replaces AES51/AES67 audio-over-IP with guaranteed delivery
+- **Broadcast infrastructure** — directly replaces AES67 audio-over-IP with guaranteed delivery
 
 ### 5G / 6G Backbone and Wireless
 
@@ -124,13 +124,13 @@ Flexilink is designed for any system where **determinism, security, and low late
 
 ---
 
-## Software-Defined Control — TEALeaves
+## Software-Defined Control — TeaLeaves and TeaLogics
 
-The Flexilink data plane is managed by a **soft processor (VM4)** running inside the FPGA, programmed in the **TEALeaves** domain-specific language. This enables:
+The Flexilink control and forwarding functions are built with two distinct languages from the same language family:
 
-- Routing table updates and flow management without FPGA recompilation
-- Signalling and admission control in VM4 bytecode
-- A TEALogics backend that compiles TEALeaves directly to FPGA logic — enabling hardware acceleration at software development speed
+- **TeaLeaves** defines software behaviour executed by the VM4 soft processor inside the FPGA (for example: routing updates, signalling, and admission control) without full FPGA recompilation
+- **TeaLogics** shares the same core syntax but adds hardware-oriented constructs to describe FPGA implementations of VM internals and forwarding/data-plane functions
+- A compiler toolchain can target either **VM4-executed code** or **synthesisable FPGA logic**, depending on which parts are best realized in software or hardware
 
 The **Flexilink Controller** (Windows application) provides a graphical interface for configuring switches, monitoring flows, and viewing live network state.
 
@@ -140,11 +140,11 @@ The **Flexilink Controller** (Windows application) provides a graphical interfac
 
 Flexilink is developed in close alignment with international standardisation:
 
-| Body | Activity |
-|------|----------|
-| **ETSI ISG NIN** | Non-IP Networking working group — John Grant is chair; Flexilink is the reference implementation |
-| **AES / IEC 62379** | Audio-oriented network management protocol; Flexilink implements a modified version |
-| **ETSI GS NGP 013** | Normative slot/frame format specification used by Flexilink |
+| Standard |
+|----------|
+| **ISO/IEC 62379** |
+| **ETSI GS NGP 013** |
+| **ETSI GS NIN 005 Flexilink signalling** |
 
 Collaboration enquiries are welcome from energy network operators, telecom providers, broadcast engineers, security researchers, and academic institutions.
 
@@ -162,9 +162,9 @@ All publicly available Flexilink materials are hosted under the [flexilink GitHu
 | [flexilink-docs](https://github.com/flexilink/flexilink-docs) | Research documentation and technical project materials |
 | [flexilink.github.io](https://github.com/flexilink/flexilink.github.io) | Source for this website |
 
-### Standards documents
+### Relevant Standards documents
 
-Published ETSI NIN standards are available in [`docs/standards/`](docs/standards/):
+Published ETSI NIN relevant standards are available:
 
 - [GR NIN 001](docs/standards/gr_NIN001v010101p.pdf) — Problem Statement
 - [GR NIN 002](docs/standards/gr_NIN002v010101p.pdf) — Post-IP Networking
@@ -208,5 +208,5 @@ For collaboration, demonstrations, or technical briefings:
 | **John Grant** | Nine Tiles, Cambridge — Inventor & Lead Engineer |
 | | [j@ninetiles.com](mailto:j@ninetiles.com) |
 
-- [Nine Tiles Ltd](http://www.ninetiles.com/) — Cambridge, UK
+- [Nine Tiles](http://www.ninetiles.com/) — Cambridge, UK
 - [Birmingham City University](https://www.bcu.ac.uk) — Faculty of Computing
