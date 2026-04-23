@@ -19,6 +19,10 @@ Flexilink is a **non-IP networking architecture** that replaces IP's best-effort
 
 Layer 1 (the physical medium — fibres, cables, wireless) remains unchanged. Flexilink replaces Layers 2 and 3, while upper-layer application protocols continue to operate normally above it. Session establishment may evolve to take full advantage of the new guarantees offered.
 
+### Technical lineage
+
+Flexilink builds on early work from Nine Tiles' [Brunhilde system](http://www.ninetiles.com/Brunhilde.htm), which demonstrated coexistence of guaranteed real-time service and best-effort service on shared physical media. Flexilink extends this concept in a modern non-IP architecture. See this ([external source](http://www.ninetiles.com/docs/Flexilink_for_NGP_9.pdf), [local copy](docs/Presentation/Flexilink_for_NGP_9.pdf)) for more details of Flexilink as an evolution of AES51/ATM-era deterministic media networking that carries scheduled AV traffic and best-effort IT traffic on the same Ethernet link using slot-based framing.
+
 ### Why not just use IP?
 
 IP networking carries fundamental design compromises that cannot be patched away:
