@@ -29,7 +29,7 @@ IP networking carries fundamental design compromises that cannot be patched away
 
 | Property | IP / TCP | Flexilink |
 |---|---|---|
-| Forwarding model | Best-effort, variable latency | Deterministic, guaranteed slots |
+| Forwarding model | Best-effort, variable latency | Assigned slots for time-critical traffic; Best effort for non-deterministic traffic |
 | Security | Bolt-on (TLS, IPSec, firewalls) | Security-by-design at flow setup |
 | Bandwidth waste | Header overhead, retransmissions | ≤1.6% overhead, no retransmissions |
 | Attack surface | Large (routing table poisoning, DDoS, spoofing) | Minimal — no IP addresses, no ARP, no DHCP |
